@@ -1,0 +1,79 @@
+version: "3.9"
+services:
+  app:
+    build:
+      args:
+        user: thiago
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: app-time
+    container_name: app-time
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - redis
+    networks:
+      - time
+
+  db:
+    image: mysql:8.0.32
+    container_name: db-time
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+    volumes:
+      - /docker-entrypoint-initdb.d
+    networks:
+      - time
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin-time
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    networks:
+      - time
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-time
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+      - ./:/var/www
+    networks:
+      - time
+
+  queue:
+    container_name: queue-time
+    image: app-time
+    restart: unless-stopped
+    command: "php artisan queue:work"
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - redis
+      - app
+    networks:
+      - time
+
+  redis:
+    image: redis:latest
+    container_name: redis-time
+    restart: unless-stopped
+    networks:
+      - time
+
+networks:
+  time:
+    driver: bridge
