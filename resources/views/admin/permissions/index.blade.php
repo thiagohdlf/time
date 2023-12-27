@@ -18,8 +18,14 @@
                 {{ $permission->description }}
             </td>
             <td class="border border-gray-100 text-white p-4">
-                <a class="bg-orange-400 hover:bg-orange-600 font-bold py-2 px-4 rounded" href="{{ route('admin.permission.edit', $permission->id) }}">Editar</a>
-                <a class="bg-red-400 hover:bg-red-600 font-bold py-2 px-4 rounded" href="{{ route('admin.permission.delete', $permission->id) }}">Apagar</a>
+                <div class="flex">
+                    <a class="bg-orange-400 hover:bg-orange-600 font-bold py-2 px-4 mr-2 rounded" href="{{ route('admin.permission.edit', $permission->id) }}">Editar</a>
+                    <form action="{{ route('admin.permission.delete', $permission->id) }}" method="post">
+                        @csrf
+                        @method('delete')
+                        <button class="bg-red-400 hover:bg-red-600 font-bold py-2 px-4 rounded">Apagar</button>
+                    </form>
+                </div>
             </td>
           </tr>
         @empty
@@ -31,5 +37,8 @@
         @endforelse
       </tbody>
     </table>
+    <br>
+    <br>
+    <a class="bg-green-400 hover:bg-green-600 font-bold py-2 px-4 rounded" href="{{ route('admin.permission.create') }}">Cadastrar</a>
  </div>
 </x-app-layout>

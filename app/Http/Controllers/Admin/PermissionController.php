@@ -32,7 +32,7 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        return view('admin.permission.create');
+        return view('admin.permissions.create');
     }
 
     /**
@@ -40,7 +40,8 @@ class PermissionController extends Controller
      */
     public function store(PermissionRequest $request)
     {
-        //
+        $this->permission->create($request->all());
+        return redirect()->route('admin.permission.index');
     }
 
     /**
@@ -66,7 +67,9 @@ class PermissionController extends Controller
      */
     public function update(PermissionRequest $request, string $id)
     {
-        //
+        $data = $this->permission->find($id);
+        $data->update($request->all());
+        return redirect()->route('admin.permission.index');
     }
 
     /**
@@ -74,6 +77,8 @@ class PermissionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = $this->permission->find($id);
+        $data->delete();
+        return redirect()->route('admin.permission.index');
     }
 }
