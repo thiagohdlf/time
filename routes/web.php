@@ -30,6 +30,11 @@ Route::prefix('/admin')->name('admin.')->middleware('auth')->group(function(){
     Route::delete('/permissao/{id}', [PermissionController::class, 'destroy'])->name('permission.delete');
 
     Route::get('/perfil', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/perfil/criar', [ProfileController::class, 'create'])->name('profile.create');
+    Route::post('/perfil', [ProfileController::class, 'store'])->name('profile.store');
+    Route::get('/perfil/{id}', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/perfil/{id}', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/perfil/{id}', [ProfileController::class, 'destroy'])->name('profile.delete');
 });
 
 Route::view('dashboard', 'dashboard')

@@ -3,16 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\ProfileRequest;
+use App\Models\Profile;
 
 class ProfileController extends Controller
 {
+
+    private $profile;
+
+    public function __construct(Profile $profile)
+    {
+        $this->profile = $profile;
+    }
+
      /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $data = $this->profile->paginate();
+        return view('admin.profiles.index', compact('data'));
     }
 
     /**
@@ -20,15 +30,16 @@ class ProfileController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.profiles.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProfileRequest $request)
     {
-        //
+        $this->profile->create($request->all());
+        return redirect()->route('admin.profile.index');
     }
 
     /**
@@ -44,15 +55,18 @@ class ProfileController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = $this->profile->find($id);
+        return view('admin.profiles.edit', compact('data'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProfileRequest $request, string $id)
     {
-        //
+        $data = $this->profile->find($id);
+        $data->update($request->all());
+        return redirect()->route('admin.profile.index');
     }
 
     /**
@@ -60,6 +74,8 @@ class ProfileController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = $this->profile->find($id);
+        $data->delete();
+        return redirect()->route('admin.profile.index');
     }
 }
