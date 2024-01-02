@@ -29,12 +29,18 @@ Route::prefix('/admin')->name('admin.')->middleware('auth')->group(function(){
     Route::put('/permissao/{id}', [PermissionController::class, 'update'])->name('permission.update');
     Route::delete('/permissao/{id}', [PermissionController::class, 'destroy'])->name('permission.delete');
 
+    //Profile
     Route::get('/perfil', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/perfil/criar', [ProfileController::class, 'create'])->name('profile.create');
     Route::post('/perfil', [ProfileController::class, 'store'])->name('profile.store');
     Route::get('/perfil/{id}', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/perfil/{id}', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/perfil/{id}', [ProfileController::class, 'destroy'])->name('profile.delete');
+
+    //Profile x Permission
+    Route::get('/perfil/{idProfile}/permissao', [ProfileController::class, 'permission'])->name('profile.permission');
+    Route::post('/perfil/{idProfile}/permissao', [ProfileController::class, 'permissionAdd'])->name('profile.permission.add');
+    Route::delete('/perfil/{id}/permissao/{idPermission}', [ProfileController::class, 'permissionRmv'])->name('profile.permission.rmv');
 });
 
 Route::view('dashboard', 'dashboard')

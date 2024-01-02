@@ -22,7 +22,8 @@ class ProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|min:3|max:25|unique:profiles,name',
+            'description' => 'nullable|min:5|max:50'
         ];
     }
 }

@@ -3,17 +3,23 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProfileRequest;
-use App\Models\Profile;
+use App\Http\Requests\{
+    ProfileRequest, ProfilePermissionRequest
+};
+use App\Models\{
+    Permission,
+    Profile,
+};
 
 class ProfileController extends Controller
 {
 
-    private $profile;
+    private $profile, $permission;
 
-    public function __construct(Profile $profile)
+    public function __construct(Profile $profile, Permission $permission)
     {
         $this->profile = $profile;
+        $this->permission = $permission;
     }
 
      /**
@@ -77,5 +83,36 @@ class ProfileController extends Controller
         $data = $this->profile->find($id);
         $data->delete();
         return redirect()->route('admin.profile.index');
+    }
+
+    public function permission($idProfile)
+    {
+        $data = $this->profile->find($idProfile);
+        $permissions = $this->permission->all();
+        return view('admin.profiles.permission', compact('data', 'permissions'));
+    }
+
+    public function permissionAdd(ProfilePermissionRequest $request, $idProfile)
+    {
+        $profile = $this->profile->find($idProfile);
+        $data = $request->all();
+        $permission = $profile->permissions()->whereHas('profiles', function($query) use ($data){
+            $query->where('permissions.id', $data['permission_id']);
+        })->exists();
+
+        if(!$permission){
+            $profile->permissions()->attach($data['permission_id']);
+            return redirect()->back();
+        }
+
+        return redirect()->back()->with(['error' => 'Permissão já está atribuída ao perfil!']);
+    }
+
+    public function permissionRmv($idProfile, $idPermission)
+    {
+        $profile = $this->profile->find($idProfile);
+        $permission = $this->permission->find($idPermission);
+        $profile->permissions()->detach($permission);
+        return redirect()->back()->with(['info' => 'Permissão desvinculada com sucesso!']);
     }
 }
