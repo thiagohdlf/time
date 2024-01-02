@@ -9,25 +9,26 @@
         </tr>
       </thead>
       <tbody>
-        @forelse ($data as $permission)
+        @forelse ($data as $profile)
         <tr>
             <td class="border border-gray-100 text-white p-4">
-                {{ $permission->name }}
+                {{ $profile->name }}
             </td>
             <td class="border border-gray-100 text-white p-4">
-                {{ $permission->description }}
+                {{ $profile->description }}
             </td>
             <td class="border border-gray-100 text-white p-4">
                 <div class="flex">
-                    <a class="bg-orange-400 hover:bg-orange-600 font-bold py-2 px-4 mr-2 rounded" href="{{ route('admin.permission.edit', $permission->id) }}">Editar</a>
-                    <form action="{{ route('admin.permission.delete', $permission->id) }}" method="post">
+                    <form action="{{ route('admin.profile.delete', $profile->id) }}" method="post">
                         @csrf
                         @method('delete')
                         <button class="bg-red-400 hover:bg-red-600 font-bold py-2 px-4 rounded">Apagar</button>
                     </form>
+                    <a class="bg-orange-400 hover:bg-orange-600 font-bold py-2 px-4 mr-2 rounded" href="{{ route('admin.profile.edit', $profile->id) }}">Editar</a>
+                    <a class="bg-blue-400 hover:bg-blue-600 font-bold py-2 px-4 mr-2 rounded" href="{{ route('admin.profile.permission', $profile->id) }}">Atribuir Permissão</a>
                 </div>
             </td>
-          </tr>
+        </tr>
         @empty
             <tr>
                 <td class="border border-gray-800 p-4">
@@ -39,6 +40,6 @@
     </table>
     <br>
     <br>
-    <a class="bg-green-400 hover:bg-green-600 font-bold py-2 px-4 rounded" href="{{ route('admin.permission.create') }}">Cadastrar</a>
+    <a class="bg-green-400 hover:bg-green-600 font-bold py-2 px-4 rounded" href="{{ route('admin.profile.create') }}">Cadastrar</a>
  </div>
 </x-app-layout>

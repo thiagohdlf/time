@@ -1,5 +1,5 @@
 <x-app-layout>
-<form action="{{ route('admin.permission.update', $data->id) }}" method="POST">
+<form action="{{ route('admin.profile.update', $data->id) }}" method="POST">
     <div>
         @method('put')
         @csrf

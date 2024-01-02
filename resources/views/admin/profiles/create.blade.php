@@ -1,7 +1,6 @@
 <x-app-layout>
-<form action="{{ route('admin.permission.update', $data->id) }}" method="POST">
+<form action="{{ route('admin.profile.store') }}" method="POST">
     <div>
-        @method('put')
         @csrf
         <label>Nome:</label>
         <input type="text" name="name" wire:model.blur="name">
@@ -15,7 +14,6 @@
             @error('description') <span class="error">{{ $message }}</span> @enderror
         </div>
     </div>
-
-    <button class="bg-blue-400 hover:bg-blue-600 font-bold py-2 px-4 rounded" type="submit">Atualizar</button>
+    <button class="bg-blue-400 hover:bg-blue-600 font-bold py-2 px-4 rounded" type="submit">Salvar</button>
 </form>
 </x-app-layout>
