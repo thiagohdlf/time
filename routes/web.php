@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\{
     PermissionController,
     ProfileController,
+    UserController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,14 @@ Route::prefix('/admin')->name('admin.')->middleware('auth')->group(function(){
     Route::get('/perfil/{idProfile}/permissao', [ProfileController::class, 'permission'])->name('profile.permission');
     Route::post('/perfil/{idProfile}/permissao', [ProfileController::class, 'permissionAdd'])->name('profile.permission.add');
     Route::delete('/perfil/{id}/permissao/{idPermission}', [ProfileController::class, 'permissionRmv'])->name('profile.permission.rmv');
+
+    //users
+    Route::get('/usuario', [UserController::class, 'index'])->name('user.index');
+    Route::get('/usuario/criar', [UserController::class, 'create'])->name('user.create');
+    Route::post('/usuario', [UserController::class, 'store'])->name('user.store');
+    Route::get('/usuario/{id}/editar', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/usuario', [UserController::class, 'update'])->name('user.update');
+    Route::delete('/usuario', [UserController::class, 'destroy'])->name('user.delete');
 });
 
 Route::view('dashboard', 'dashboard')

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PermissionRequest extends FormRequest
+class UserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,18 +21,10 @@ class PermissionRequest extends FormRequest
      */
     public function rules(): array
     {
-        /*return [
-            'name' => "required|min:3|max:25|unique:permissions,name",
-            'description' => "nullable|min:5|max:50"
-        ];*/
-        $rules = [
-            'name' => "required|min:3|max:25",
-            'description' => "nullable|min:5|max:50"
+        return [
+            'name' => 'required|min:3|max:100',
+            'email' => 'required|min:6|max:150|unique:users,email',
+            'password' => 'required|confirmed|min:6|max:24',
         ];
-
-        if($this->method() === 'POST'){
-            $rules['name'] .= '|unique:permissions,name';
-        }
-        return $rules;
     }
 }

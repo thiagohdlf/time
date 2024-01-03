@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permission_profile', function (Blueprint $table) {
-
+        Schema::create('profile_user', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('permission_id');
             $table->unsignedBigInteger('profile_id');
+            $table->unsignedBigInteger('user_id');
 
-            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
             $table->foreign('profile_id')->references('id')->on('profiles')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
         });
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permission_profile');
+        Schema::dropIfExists('profile_user');
     }
 };
