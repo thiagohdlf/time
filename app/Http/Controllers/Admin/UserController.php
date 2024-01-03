@@ -3,19 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\{
+    UserRequest,
+    UserProfileRequest,
+};
 use App\Models\{
+    Profile,
     User,
 };
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    private $user;
+    private $user, $profile;
 
-    public function __construct(User $user)
+    public function __construct(User $user, Profile $profile)
     {
         $this->user = $user;
+        $this->profile = $profile;
     }
 
     /**
@@ -69,7 +74,15 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, string $id)
     {
-        //
+        $user = $this->user->find($id);
+        $data = $request->all();
+        if($data['password'] = ''){
+            $data['password'] = Hash::make($data['password']);
+        }else{
+            unset($data['password']);
+        }
+        $user->update($data);
+        return redirect()->route('admin.user.index');
     }
 
     /**
@@ -77,6 +90,38 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = $this->user->find($id);
+        $data->delete();
+        return redirect()->route('admin.user.index');
+    }
+
+    public function profile($idUser)
+    {
+        $data = $this->user->find($idUser);
+        $profiles = $this->profile->all();
+        return view('admin.users.profile', compact('data', 'profiles'));
+    }
+
+    public function profileAdd(UserProfileRequest $request, $idUser)
+    {
+        $user = $this->user->find($idUser);
+        $data = $request->all();
+        $profile = $user->profiles()->whereHas('users', function($query) use ($data){
+            $query->where('profiles.id', $data['profile_id']);
+        })->exists();
+
+        if(!$profile){
+            $user->profiles()->attach($data['profile_id']);
+            return redirect()->back()->with(['info' => 'Perfil atribuído com sucesso!']);
+        }
+        return redirect()->back()->with(['error' => 'Perfil já está atribuído ao usuário!']);
+    }
+
+    public function profileRmv($idUser, $idProfile)
+    {
+        $user = $this->user->find($idUser);
+        $profile = $this->user->find($idProfile);
+        $user->profiles()->detach($profile);
+        return redirect()->back()->with(['info' => 'Perfil desvinculado com sucesso!']);
     }
 }

@@ -48,8 +48,12 @@ Route::prefix('/admin')->name('admin.')->middleware('auth')->group(function(){
     Route::get('/usuario/criar', [UserController::class, 'create'])->name('user.create');
     Route::post('/usuario', [UserController::class, 'store'])->name('user.store');
     Route::get('/usuario/{id}/editar', [UserController::class, 'edit'])->name('user.edit');
-    Route::put('/usuario', [UserController::class, 'update'])->name('user.update');
-    Route::delete('/usuario', [UserController::class, 'destroy'])->name('user.delete');
+    Route::put('/usuario/{id}', [UserController::class, 'update'])->name('user.update');
+    Route::delete('/usuario/{id}', [UserController::class, 'destroy'])->name('user.delete');
+
+    Route::get('/usuario/{idUser}/perfil', [UserController::class, 'profile'])->name('user.profile');
+    Route::post('/usuario/{idUser}/perfil', [UserController::class, 'profileAdd'])->name('user.profile.add');
+    Route::delete('/usuario/{idUser}/perfil/{idProfile}', [UserController::class, 'profileRmv'])->name('user.profile.rmv');
 });
 
 Route::view('dashboard', 'dashboard')

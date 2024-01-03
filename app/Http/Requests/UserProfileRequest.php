@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PermissionRequest extends FormRequest
+class UserProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,15 +21,8 @@ class PermissionRequest extends FormRequest
      */
     public function rules(): array
     {
-
-        $rules = [
-            'name' => "required|min:3|max:25",
-            'description' => "nullable|min:5|max:50"
+        return [
+            'profile_id' => 'required',
         ];
-
-        if($this->method() === 'POST'){
-            $rules['name'] .= '|unique:permissions,name';
-        }
-        return $rules;
     }
 }
