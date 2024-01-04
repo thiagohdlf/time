@@ -24,7 +24,10 @@
                         @method('delete')
                         <button class="bg-red-400 hover:bg-red-600 font-bold py-2 px-4 rounded">Apagar</button>
                     </form>
-                    <a class="bg-orange-400 hover:bg-orange-600 font-bold py-2 px-4 mr-2 rounded" href="{{ route('admin.user.edit', $user->id) }}">Editar</a>
+                    @can('edit-user')
+                        <a class="bg-orange-400 hover:bg-orange-600 font-bold py-2 px-4 mr-2 rounded" href="{{ route('admin.user.edit', $user->id) }}">Editar</a>
+                    @endcan
+
                     <a class="bg-blue-400 hover:bg-blue-600 font-bold py-2 px-4 mr-2 rounded" href="{{ route('admin.user.profile', $user->id) }}">Atribuir Perfil</a>
                 </div>
             </td>

@@ -28,6 +28,30 @@ new class extends Component
                     </a>
                 </div>
 
+                <div class="shrink-0 flex items-center">
+                    @can('view-user')
+                    <a href="{{ route('admin.user.index') }}" wire:navigate>
+                        Usuários
+                    </a>
+                    @endcan
+                </div>
+
+                <div class="shrink-0 flex items-center">
+                    @can('view-profile')
+                    <a href="{{ route('admin.profile.index') }}" wire:navigate>
+                        Perfis
+                    </a>
+                    @endcan
+                </div>
+
+                <div class="shrink-0 flex items-center">
+                    @can('view-permission')
+                    <a href="{{ route('admin.permission.index') }}" wire:navigate>
+                        Permissões
+                    </a>
+                    @endcan
+                </div>
+
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>

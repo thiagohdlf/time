@@ -21,6 +21,7 @@ class UserController extends Controller
     {
         $this->user = $user;
         $this->profile = $profile;
+        $this->middleware(['can:edit-user']);
     }
 
     /**
