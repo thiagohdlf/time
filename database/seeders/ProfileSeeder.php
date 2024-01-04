@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Profile;
+use App\Models\{
+    Permission,
+    Profile,
+};
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,6 +17,8 @@ class ProfileSeeder extends Seeder
     public function run(): void
     {
         //
+        $permission = Permission::all();
+
         $data = [
             [
                 'name' => 'Super Admin',
@@ -35,7 +40,10 @@ class ProfileSeeder extends Seeder
                 $profile->update($profiles);
                 echo 'Profile updated successfully!';
             }else{
-                Profile::create($profiles);
+                $profile = Profile::create($profiles);
+                if($profile->name == 'Super Admin'){
+                    $profile->permissions()->attach($permission);
+                }
                 echo 'Profile created successfully!';
             }
         }
