@@ -42,4 +42,28 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function profiles()
+    {
+        return $this->belongsToMany(Profile::class);
+    }
+
+    public function profileExists($profile)
+    {
+        if(is_string($profile)){
+            $profile = Profile::where('name', $profile)->firstOrFail();
+        }
+        return (boolean) $this->profiles()->find($profile->id);
+    }
+
+    public function isAdmin()
+    {
+        return $this->profileExists('Super Admin');
+    }
+
+    public function hasOnePermission($profile)
+    {
+        $userProfile = $this->profiles;
+        return $profile->intersect($userProfile)->count();
+    }
 }

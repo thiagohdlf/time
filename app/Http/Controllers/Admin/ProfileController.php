@@ -102,7 +102,7 @@ class ProfileController extends Controller
 
         if(!$permission){
             $profile->permissions()->attach($data['permission_id']);
-            return redirect()->back();
+            return redirect()->back()->with(['info' => 'Permissão atribuída com sucesso!']);
         }
 
         return redirect()->back()->with(['error' => 'Permissão já está atribuída ao perfil!']);

@@ -21,9 +21,14 @@ class ProfileRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required|min:3|max:25|unique:profiles,name',
-            'description' => 'nullable|min:5|max:50'
+        $rules = [
+            'name' => "required|min:3|max:25",
+            'description' => "nullable|min:5|max:50"
         ];
+
+        if($this->method() === 'POST'){
+            $rules['name'] .= '|unique:profiles,name';
+        }
+        return $rules;
     }
 }
